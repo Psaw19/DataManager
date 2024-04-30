@@ -5,6 +5,7 @@ import NotesAction from "./NotesAction";
 import { useActions } from "@/hooks/useActions";
 import { useUserData } from "@/hooks/useUserData";
 import { NotesSkeleton } from "../Skeleton/SkeletonCard";
+import { Accordion } from "../ui/accordion";
 
 const NotesData = () => {
   const { loading, actions } = useActions({
@@ -35,17 +36,22 @@ const NotesData = () => {
               <h1>You haven&apos;t added any notes</h1>
             </div>
           ) : (
-            <div className="flex flex-col gap-4">
-              {data?.map((ele) => (
-                <div key={ele._id}>
+            <Accordion
+              type="single"
+              collapsible
+              className="flex flex-col gap-4"
+            >
+              {data?.map(({ _id, title, description }, idx) => (
+                <div key={_id}>
                   <NotesAction
-                    title={ele.title}
-                    description={ele.description}
-                    id={ele._id}
+                    title={title}
+                    description={description}
+                    id={_id}
+                    idx={idx}
                   />
                 </div>
               ))}
-            </div>
+            </Accordion>
           )}
         </div>
       )}
