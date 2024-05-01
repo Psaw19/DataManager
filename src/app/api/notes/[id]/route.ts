@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import getUser from "@/lib/getUser";
+import getUser from "@/lib/getUserFromServerSession";
 import { NoteModel } from "@/models/note.model";
 import { UserModel } from "@/models/user.model";
 import { NextRequest } from "next/server";

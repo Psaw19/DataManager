@@ -4,7 +4,7 @@ import React from "react";
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import { Button } from "../ui/button";
+import { Button } from "../button";
 
 export function ThemeToggler() {
   const { theme, setTheme } = useTheme();

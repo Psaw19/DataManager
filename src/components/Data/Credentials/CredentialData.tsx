@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import CredentialActions from "./CredentialActions";
+import { useEffect } from "react";
+
+import CredentialActions from "@/components/Data/Credentials/CredentialActions";
 import { useActions } from "@/hooks/useActions";
 import { useUserData } from "@/hooks/useUserData";
-import { useEffect } from "react";
-import { CredentialSkeleton } from "../Skeleton/SkeletonCard";
+import { CredentialSkeleton } from "@/components/ui/derived/skeleton-template";
 
 const CredentialData = () => {
   const { loading, actions } = useActions({
@@ -13,11 +14,10 @@ const CredentialData = () => {
     dataVariant: "credentials",
   });
 
+  const { credentials: data } = useUserData();
   useEffect(() => {
     actions();
   }, []);
-
-  const { credentials: data } = useUserData();
 
   if (loading) {
     return (

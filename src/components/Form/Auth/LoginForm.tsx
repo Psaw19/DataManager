@@ -1,9 +1,14 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useEffect, useState, useTransition } from "react";
+import Link from "next/link";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UserCircle } from "lucide-react";
+
 import {
   Form,
   FormControl,
@@ -12,16 +17,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/derived/password-input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { PasswordInput } from "@/components/ui/password-input";
-import { UserCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { LoginSchema } from "@/schemas";
-import { useEffect, useState, useTransition } from "react";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { FormError } from "../form-error";
+import { FormError } from "@/components/ui/derived/form-error";
+import toast from "react-hot-toast";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -45,20 +46,29 @@ const LoginForm = () => {
 
   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     setError("");
+    toast.loading("Logging in...");
     const { username, password } = values;
-    startTransition(async () => {
-      const response = await signIn("credentials", {
-        username,
-        password,
-        redirect: false,
+    try {
+      startTransition(async () => {
+        const response = await signIn("credentials", {
+          username,
+          password,
+          redirect: false,
+        });
+        console.log(response?.error);
+        if (response?.error) {
+          setError("Invalid credentials");
+          return;
+        }
+
+        router.replace("/");
+        toast.dismiss();
+        toast.success("User logged in");
       });
-      console.log(response?.error);
-      if (response?.error) {
-        setError("Invalid credentials");
-        return;
-      }
-      router.replace("/");
-    });
+    } catch (error) {
+      toast.dismiss();
+      toast.error("Something went wrong");
+    }
   };
   return (
     <div>

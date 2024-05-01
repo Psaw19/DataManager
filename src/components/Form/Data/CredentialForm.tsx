@@ -1,8 +1,10 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { UserCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+
 import {
   Form,
   FormControl,
@@ -10,36 +12,35 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Textarea } from "../ui/textarea";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { NoteSchema } from "@/schemas";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { PasswordInput } from "@/components/ui/derived/password-input";
+import { CredentialSchema } from "@/schemas";
 import { useActions } from "@/hooks/useActions";
-import { AutosizeTextarea } from "../ui/autosize-textarea";
 
-const NotesForm = () => {
-  const form = useForm<z.infer<typeof NoteSchema>>({
-    resolver: zodResolver(NoteSchema),
+const CredentialForm = () => {
+  const form = useForm<z.infer<typeof CredentialSchema>>({
+    resolver: zodResolver(CredentialSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      username: "",
+      password: "",
     },
   });
 
-  const { actions, loading, error } = useActions({
+  const { loading, actions, error } = useActions({
     method: "POST",
-    dataVariant: "notes",
+    dataVariant: "credentials",
   });
 
-  const onSubmit = async (values: z.infer<typeof NoteSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof CredentialSchema>) => {
     await actions(values);
 
     if (!error) {
       form.reset();
     }
   };
+
   return (
     <div>
       <Form {...form}>
@@ -47,16 +48,17 @@ const NotesForm = () => {
           <div className="space-y-4">
             <FormField
               control={form.control}
-              name="title"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
                       type="text"
-                      placeholder="Add your title here..."
+                      placeholder="username"
                       {...field}
+                      suffix={<UserCircle className="opacity-80" />}
                     />
                   </FormControl>
                   <FormMessage />
@@ -66,16 +68,14 @@ const NotesForm = () => {
 
             <FormField
               control={form.control}
-              name="description"
+              name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <AutosizeTextarea
-                      minHeight={100}
-                      className="resize-y"
+                    <PasswordInput
                       disabled={loading}
-                      placeholder="Enter your description here"
+                      placeholder="********"
                       {...field}
                     />
                   </FormControl>
@@ -85,7 +85,7 @@ const NotesForm = () => {
             />
           </div>
           <Button disabled={loading} className="w-full" type="submit">
-            Submit
+            Add Password
           </Button>
         </form>
       </Form>
@@ -93,4 +93,4 @@ const NotesForm = () => {
   );
 };
 
-export default NotesForm;
+export default CredentialForm;

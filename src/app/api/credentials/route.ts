@@ -2,7 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/models/user.model";
 import { CredentialModel } from "@/models/credential.model";
 import { NextRequest } from "next/server";
-import getUser from "@/lib/getUser";
+import getUser from "@/lib/getUserFromServerSession";
 
 export async function POST(request: NextRequest) {
   console.log("POST CREDENTIAL RUNNING..............");

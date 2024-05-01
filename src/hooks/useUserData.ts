@@ -1,6 +1,7 @@
+import { create } from "zustand";
+
 import { CredentialDocument } from "@/models/credential.model";
 import { NoteDocument } from "@/models/note.model";
-import { create } from "zustand";
 
 type State = {
   credentials: CredentialDocument[];

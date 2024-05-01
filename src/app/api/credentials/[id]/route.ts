@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import getUser from "@/lib/getUser";
+import getUser from "@/lib/getUserFromServerSession";
 import { CredentialModel } from "@/models/credential.model";
 import { UserModel } from "@/models/user.model";
 import { NextRequest } from "next/server";

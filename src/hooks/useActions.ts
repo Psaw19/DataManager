@@ -1,9 +1,10 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { useState } from "react";
-import { useUserData } from "./useUserData";
 import toast from "react-hot-toast";
+
 import { Method, DataVariant } from "@/types/types";
-import useUrl from "./useUrl";
+import { useUserData } from "@/hooks/useUserData";
+import useUrl from "@/hooks/useUrl";
 
 interface Options {
   method: Method;

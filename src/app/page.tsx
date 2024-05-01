@@ -6,7 +6,7 @@ import { Quote } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
-  const { user } = useClientUser();
+  const { loading, user } = useClientUser();
 
   return (
     <div
@@ -28,10 +28,14 @@ export default function Home() {
       {user && (
         <div className="flex gap-10">
           <Link href="/credentials">
-            <Button className="text-xl px-8 py-6">Credentials</Button>
+            <Button disabled={loading} className="text-xl px-8 py-6">
+              Passwords
+            </Button>
           </Link>
           <Link href="/notes">
-            <Button className="text-xl px-8 py-6">Notes</Button>
+            <Button disabled={loading} className="text-xl px-8 py-6">
+              Notes
+            </Button>
           </Link>
         </div>
       )}

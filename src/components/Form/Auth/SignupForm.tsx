@@ -14,19 +14,21 @@ import {
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import Link from "next/link";
-import { PasswordInput } from "../../ui/password-input";
+import { PasswordInput } from "../../ui/derived/password-input";
 import { MailIcon, UserCircle } from "lucide-react";
 import axios from "axios";
 import { SignUpSchema } from "@/schemas";
 import { useEffect, useState, useTransition } from "react";
-import { FormError } from "../form-error";
+import { FormError } from "../../ui/derived/form-error";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const SignupForm = () => {
   const router = useRouter();
-
+  const url = process.env.NEXT_PUBLIC_BASE_URL + "/auth/sign-up";
   const { data: session } = useSession();
+
   useEffect(() => {
     if (session?.user) {
       router.replace("/");
@@ -49,20 +51,25 @@ const SignupForm = () => {
   const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
     setError("");
     const { confirmPassword, ...formData } = values;
+    toast.loading("Creating User...");
 
-    startTransition(async () => {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/sign-up",
-        formData
-      );
+    try {
+      startTransition(async () => {
+        const response = await axios.post(url, formData);
 
-      if (!response?.data?.success) {
-        console.log(response);
-        setError("Unable to register, please try again!");
-      }
-      form.reset();
-      router.replace("/login");
-    });
+        if (!response?.data?.success) {
+          console.log(response);
+          setError("Unable to register, please try again!");
+        }
+        form.reset();
+        router.replace("/login");
+        toast.dismiss();
+        toast.success("User registered successfully");
+      });
+    } catch (error) {
+      toast.dismiss();
+      toast.error("Unable to register user, Please try again after sometime");
+    }
   };
 
   return (

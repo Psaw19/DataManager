@@ -1,4 +1,7 @@
 import React from "react";
+import { signOut } from "next-auth/react";
+import { LogOutIcon } from "lucide-react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,15 +11,21 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import { signOut } from "next-auth/react";
-import { LogOutIcon } from "lucide-react";
+} from "@/components/ui/alert-dialog";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Logout = () => {
+  const router = useRouter();
   const handleLogout = async () => {
     try {
+      toast.loading("Logging out");
       signOut();
+      toast.dismiss();
+      toast.success("Logged out");
     } catch (error) {
+      toast.dismiss();
+      toast.error("Error while Logging out");
       console.error("Error while logging out => ", error);
     }
   };
