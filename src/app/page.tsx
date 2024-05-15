@@ -1,9 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import useClientUser from "@/hooks/useClientUser";
 import { Quote } from "lucide-react";
 import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import useClientUser from "@/hooks/useClientUser";
 
 export default function Home() {
   const { loading, user } = useClientUser();

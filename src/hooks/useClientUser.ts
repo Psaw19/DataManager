@@ -3,14 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 
-interface User {
-  _id?: string;
-  username?: string;
-  fullname?: string;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-}
+import { User } from "@/types";
 
 interface UseClientUserResult {
   loading: boolean;
@@ -24,13 +17,8 @@ const useClientUser = (): UseClientUserResult => {
   const { data: session } = useSession();
 
   useEffect(() => {
-    if (session) {
-      setUser(session.user as User);
-      setLoading(false);
-    } else {
-      setUser(null);
-      setLoading(false);
-    }
+    session?.user ? setUser(session?.user) : null;
+    setLoading(false);
   }, [session]);
 
   return { loading, user };

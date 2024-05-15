@@ -1,8 +1,10 @@
+import bcrypt from "bcrypt";
+import { NextRequest } from "next/server";
+
 import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/models/user.model";
-import bcrypt from "bcrypt";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   await dbConnect();
 
   try {
@@ -51,18 +53,18 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: true,
-        message: "User registered successfully!!",
+        message: "User registered successfully",
       },
       {
         status: 200,
       }
     );
   } catch (error) {
-    console.error("Error while registering user ===>>>", error);
+    console.error("Error while registering user", error);
     return Response.json(
       {
         success: false,
-        message: "Error while registering user",
+        message: "Error while registering user, Please try again later",
       },
       {
         status: 500,

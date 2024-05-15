@@ -1,6 +1,6 @@
 import { Button } from "../button";
 import { useActions } from "@/hooks/useActions";
-import { DataVariant } from "@/types/types";
+import { DataVariant } from "@/types";
 
 interface DeleteButtonProps {
   id: string;

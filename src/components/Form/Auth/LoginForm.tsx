@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserCircle } from "lucide-react";
+import toast from "react-hot-toast";
 
 import {
   Form,
@@ -22,7 +23,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LoginSchema } from "@/schemas";
 import { FormError } from "@/components/ui/derived/form-error";
-import toast from "react-hot-toast";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -48,27 +48,24 @@ const LoginForm = () => {
     setError("");
     toast.loading("Logging in...");
     const { username, password } = values;
-    try {
-      startTransition(async () => {
-        const response = await signIn("credentials", {
-          username,
-          password,
-          redirect: false,
-        });
-        console.log(response?.error);
-        if (response?.error) {
-          setError("Invalid credentials");
-          return;
-        }
 
-        router.replace("/");
-        toast.dismiss();
-        toast.success("User logged in");
+    startTransition(async () => {
+      const response = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
       });
-    } catch (error) {
+      console.log(response);
+      if (response?.error) {
+        toast.dismiss();
+        setError(response.error);
+        return;
+      }
+
+      router.replace("/");
       toast.dismiss();
-      toast.error("Something went wrong");
-    }
+      toast.success("User logged in");
+    });
   };
   return (
     <div>

@@ -1,7 +1,8 @@
+import { NextRequest } from "next/server";
+
 import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/models/user.model";
 import { CredentialModel } from "@/models/credential.model";
-import { NextRequest } from "next/server";
 import getUser from "@/lib/getUserFromServerSession";
 
 export async function POST(request: NextRequest) {
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
     return Response.json(
       {
         success: false,
-        message: "Internal:Unable to create Credential",
+        message: "Internal: Unable to create Credential",
       },
       {
         status: 500,
@@ -120,88 +121,3 @@ export async function GET() {
     );
   }
 }
-
-// export async function DELETE(request: NextRequest) {
-//   console.log("............DELETE CREDENTIAL RUNNING..............");
-//   await dbConnect();
-//   try {
-//     const userSession = await getUser();
-//     const credentialId = request.nextUrl.searchParams.get("id");
-//     // console.log({ userSession });
-//     // console.log({ credentialId });
-
-//     const user = await UserModel.findById(userSession?._id);
-//     const credential = await CredentialModel.findById(credentialId);
-
-//     if (!credential) {
-//       return Response.json(
-//         {
-//           success: false,
-//           message: "Credential not found",
-//         },
-//         {
-//           status: 404,
-//         }
-//       );
-//     }
-//     console.log({ Credential: credential });
-
-//     if (!user) {
-//       return Response.json(
-//         {
-//           success: false,
-//           message: "Unable to find user while deleting credential",
-//         },
-//         {
-//           status: 404,
-//         }
-//       );
-//     }
-
-//     if (!user?.credentials.includes(credentialId)) {
-//       return Response.json(
-//         {
-//           success: false,
-//           message: "Credential not found in user",
-//         },
-//         {
-//           status: 404,
-//         }
-//       );
-//     }
-
-//     await UserModel.findByIdAndUpdate(
-//       { _id: user?._id },
-//       {
-//         $pull: {
-//           credentials: credentialId,
-//         },
-//       },
-//       { new: true }
-//     );
-
-//     await CredentialModel.findByIdAndDelete(credentialId);
-
-//     return Response.json(
-//       {
-//         success: true,
-//         message: "Credential deleted successfully",
-//         user,
-//       },
-//       {
-//         status: 200,
-//       }
-//     );
-//   } catch (error) {
-//     console.error("Unable to delete credential", error);
-//     return Response.json(
-//       {
-//         success: false,
-//         message: "Internal:Unable to delete credential",
-//       },
-//       {
-//         status: 500,
-//       }
-//     );
-//   }
-// }

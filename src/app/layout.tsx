@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import Navbar from "@/components/Navbar/Navbar";
-import { AuthProvider } from "../components/Providers/session-provider";
-import { ThemeProvider } from "@/components/Providers/theme-provider";
 import { Toaster } from "react-hot-toast";
+
+import "@/app/globals.css";
+import Navbar from "@/components/Navbar/Navbar";
+import { AuthProvider } from "@/components/Providers/session-provider";
+import { ThemeProvider } from "@/components/Providers/theme-provider";
 
 export const metadata: Metadata = {
   title: "Notes and Password Manager",
@@ -17,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="h-screen">
+      <body className="h-[100dvh]">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

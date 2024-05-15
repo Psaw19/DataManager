@@ -2,12 +2,12 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { Method, DataVariant } from "@/types/types";
+import { HttpMethod, DataVariant } from "@/types";
 import { useUserData } from "@/hooks/useUserData";
 import useUrl from "@/hooks/useUrl";
 
 interface Options {
-  method: Method;
+  method: HttpMethod;
   id?: string;
   dataVariant: DataVariant;
 }

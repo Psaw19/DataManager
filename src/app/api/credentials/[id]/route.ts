@@ -1,8 +1,9 @@
+import { NextRequest } from "next/server";
+
 import dbConnect from "@/lib/dbConnect";
 import getUser from "@/lib/getUserFromServerSession";
 import { CredentialModel } from "@/models/credential.model";
 import { UserModel } from "@/models/user.model";
-import { NextRequest } from "next/server";
 
 export async function PUT(request: NextRequest, { params }: any) {
   console.log("............PUT CREDENTIAL RUNNING..............");

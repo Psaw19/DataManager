@@ -1,8 +1,16 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import axios, { AxiosResponse } from "axios";
+import { MailIcon, UserCircle } from "lucide-react";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -10,19 +18,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
-import { Input } from "../../ui/input";
-import { Button } from "../../ui/button";
-import Link from "next/link";
-import { PasswordInput } from "../../ui/derived/password-input";
-import { MailIcon, UserCircle } from "lucide-react";
-import axios from "axios";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { PasswordInput } from "@/components/ui/derived/password-input";
 import { SignUpSchema } from "@/schemas";
-import { useEffect, useState, useTransition } from "react";
-import { FormError } from "../../ui/derived/form-error";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import toast from "react-hot-toast";
+import { FormError } from "@/components/ui/derived/form-error";
+import { AxiosResponseData } from "@/types";
 
 const SignupForm = () => {
   const router = useRouter();
@@ -53,23 +55,25 @@ const SignupForm = () => {
     const { confirmPassword, ...formData } = values;
     toast.loading("Creating User...");
 
-    try {
-      startTransition(async () => {
-        const response = await axios.post(url, formData);
-
-        if (!response?.data?.success) {
-          console.log(response);
-          setError("Unable to register, please try again!");
-        }
+    startTransition(async () => {
+      try {
+        const response: AxiosResponse<AxiosResponseData> = await axios.post(
+          url,
+          formData
+        );
         form.reset();
         router.replace("/login");
         toast.dismiss();
-        toast.success("User registered successfully");
-      });
-    } catch (error) {
-      toast.dismiss();
-      toast.error("Unable to register user, Please try again after sometime");
-    }
+        toast.success(response.data.message);
+      } catch (error) {
+        toast.dismiss();
+        if (axios.isAxiosError<AxiosResponseData>(error)) {
+          toast.error(error.response?.data.message as string);
+        } else {
+          toast.error("Unable to register user, Please try again later");
+        }
+      }
+    });
   };
 
   return (

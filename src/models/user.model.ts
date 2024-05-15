@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
-import { NoteDocument } from "./note.model";
-import { CredentialDocument } from "./credential.model";
+import { NoteDocument } from "@/models/note.model";
+import { CredentialDocument } from "@/models/credential.model";
 
 export interface UserDocument extends Document {
   fullname: string;

@@ -1,4 +1,4 @@
-import { DataVariant } from "@/types/types";
+import { DataVariant } from "@/types";
 
 interface UrlOptions {
   id?: string;

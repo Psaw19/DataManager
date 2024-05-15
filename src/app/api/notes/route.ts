@@ -1,7 +1,8 @@
+import { NextRequest } from "next/server";
+
 import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/models/user.model";
 import { NoteModel } from "@/models/note.model";
-import { NextRequest } from "next/server";
 import getUser from "@/lib/getUserFromServerSession";
 
 export async function POST(request: NextRequest) {

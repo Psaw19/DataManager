@@ -1,8 +1,11 @@
 "use client";
 
+import { SquarePenIcon } from "lucide-react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -15,10 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { NoteSchema } from "@/schemas";
 import DeleteButton from "@/components/ui/derived/delete-btn";
-import { SquarePenIcon } from "lucide-react";
 import { useActions } from "@/hooks/useActions";
 import { AutosizeTextarea } from "@/components/ui/derived/autosize-textarea";
-import { useRef, useState } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 
 interface NotesActionsProps {
