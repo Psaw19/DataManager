@@ -1,10 +1,17 @@
 import dbConnect from "@/lib/dbConnect";
 import getUser from "@/lib/getUserFromServerSession";
-import { NoteModel } from "@/models/note.model";
+import { NoteDocument, NoteModel } from "@/models/note.model";
 import { UserModel } from "@/models/user.model";
 import { NextRequest } from "next/server";
 
-export async function PUT(request: NextRequest, { params }: any) {
+interface NoteParams {
+  id: string;
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: NoteParams }
+) {
   await dbConnect();
 
   try {
@@ -24,12 +31,24 @@ export async function PUT(request: NextRequest, { params }: any) {
       );
     }
     const { id: noteId } = params;
-    const { title, description } = await request.json();
+    const requestBody: NoteDocument = await request.json();
+    const allowedFields = ["title", "description"];
+    const updatedFields: Partial<NoteDocument> = {};
 
-    const updatedNote = await NoteModel.findByIdAndUpdate(noteId, {
-      title,
-      description,
+    allowedFields.forEach((field) => {
+      if (requestBody[field as keyof NoteDocument] !== undefined) {
+        updatedFields[field as keyof NoteDocument] =
+          requestBody[field as keyof NoteDocument];
+      }
     });
+
+    const updatedNote = await NoteModel.findByIdAndUpdate(
+      noteId,
+      updatedFields,
+      {
+        new: true,
+      }
+    );
 
     if (!updatedNote) {
       console.error("Error in updating notes");

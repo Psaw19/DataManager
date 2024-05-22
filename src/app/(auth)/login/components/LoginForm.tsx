@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserCircle } from "lucide-react";
+import { MailIcon } from "lucide-react";
 import toast from "react-hot-toast";
 
 import {
@@ -39,7 +39,7 @@ const LoginForm = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -47,11 +47,11 @@ const LoginForm = () => {
   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     setError("");
     toast.loading("Logging in...");
-    const { username, password } = values;
+    const { email, password } = values;
 
     startTransition(async () => {
       const response = await signIn("credentials", {
-        username,
+        email,
         password,
         redirect: false,
       });
@@ -74,17 +74,17 @@ const LoginForm = () => {
           <div className="space-y-4">
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                      type="text"
+                      type="email"
                       disabled={isPending}
-                      placeholder="username"
+                      placeholder="john.doe@example.com"
                       {...field}
-                      suffix={<UserCircle className="opacity-80" />}
+                      suffix={<MailIcon className="opacity-80" />}
                     />
                   </FormControl>
                   <FormMessage />

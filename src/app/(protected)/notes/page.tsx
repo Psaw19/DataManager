@@ -1,6 +1,6 @@
 import { CardWrapper } from "@/components/ui/derived/card-wrapper";
-import NotesData from "@/components/Data/Notes/NotesData";
-import NotesForm from "@/components/Form/Data/NotesForm";
+import NotesData from "@/app/(protected)/notes/components/NotesData";
+import NotesForm from "@/app/(protected)/notes/components/NotesForm";
 
 const page = () => {
   return (

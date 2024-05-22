@@ -32,6 +32,7 @@ const CredentialActions = ({
   password,
   id,
 }: CredentialActionsProps) => {
+  console.log("running..");
   const [edit, setEdit] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof CredentialSchema>>({
@@ -59,6 +60,8 @@ const CredentialActions = ({
   useOutsideClick(ref, handleOutsideClick);
 
   const onSubmit = async (values: z.infer<typeof CredentialSchema>) => {
+    console.log("PUTTING FROM CREDENTIAL ACTIONS");
+
     await actions(values);
 
     if (!error) {

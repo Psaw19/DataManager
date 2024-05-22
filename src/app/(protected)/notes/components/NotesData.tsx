@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useActions } from "@/hooks/useActions";
 import { useUserData } from "@/hooks/useUserData";
 import { NotesSkeleton } from "@/components/ui/derived/skeleton-template";
-import NotesAction from "@/components/Data/Notes/NotesAction";
+import NotesAction from "@/app/(protected)/notes/components/NotesAction";
 
 const NotesData = () => {
   const { loading, actions } = useActions({
@@ -15,8 +15,10 @@ const NotesData = () => {
 
   const { notes: data } = useUserData();
 
+  const fetchUserData = async () => await actions();
+
   useEffect(() => {
-    actions();
+    fetchUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -37,7 +39,7 @@ const NotesData = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-3">
-              {data?.map(({ _id, title, description }, idx) => (
+              {data?.map(({ _id, title, description }) => (
                 <div key={_id}>
                   <NotesAction
                     title={title}

@@ -1,34 +1,42 @@
 import bcrypt from "bcrypt";
 import { NextRequest } from "next/server";
+import { z } from "zod";
 
 import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/models/user.model";
+import { SignUpSchema } from "@/schemas";
 
 export async function POST(request: NextRequest) {
+  console.log("-----------Signing Up----------");
   await dbConnect();
 
   try {
-    const { fullname, username, email, password } = await request.json();
-    console.log(fullname, username, email, password);
-    if (!fullname || !username || !email || !password) {
-      return Response.json({
-        success: false,
-        message: "Signup data nhi mila",
-      });
-    }
-    const existingUserByUsername = await UserModel.findOne({
-      username,
-    });
-
-    if (existingUserByUsername) {
+    const userData: z.infer<typeof SignUpSchema> = await request.json();
+    const isValidUserDetails = SignUpSchema.safeParse(userData);
+    if (!isValidUserDetails) {
       return Response.json(
         {
           success: false,
-          message: "Username already exists",
+          message: "Invalid User Data",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+
+    const { name, email, password, confirmPassword } = userData;
+
+    if (password !== confirmPassword) {
+      return Response.json(
+        {
+          success: false,
+          message: "Passwords do not match",
         },
         { status: 400 }
       );
     }
+
     const existingUserByEmail = await UserModel.findOne({ email });
     if (existingUserByEmail) {
       return Response.json(
@@ -42,8 +50,7 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new UserModel({
-      fullname,
-      username,
+      name,
       email,
       password: hashedPassword,
     });

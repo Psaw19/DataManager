@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { UserModel } from "@/models/user.model";
 import dbConnect from "@/lib/dbConnect";
 
-export async function POST(request: NextRequest) {
+export async function PUT(request: NextRequest) {
   dbConnect();
   try {
     const { email } = await request.json();

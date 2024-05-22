@@ -8,8 +8,6 @@ export interface AxiosResponseData {
 
 export interface User {
   _id?: string;
-  username?: string;
-  fullname?: string;
   name?: string | null;
   email?: string | null;
   image?: string | null;

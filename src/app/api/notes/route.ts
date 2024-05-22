@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
     const { title, description } = await request.json();
 
     const newNote = await NoteModel.create({
+      userId,
       title,
       description,
     });

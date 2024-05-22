@@ -7,9 +7,9 @@ interface UrlOptions {
 
 const useUrl = ({ id, dataVariant }: UrlOptions) => {
   if (id) {
-    return process.env.NEXT_PUBLIC_BASE_URL + "/" + dataVariant + "/" + id;
+    return (process.env.NEXT_PUBLIC_BASE_URL_PROD || process.env.NEXT_PUBLIC_BASE_URL) + "/" + dataVariant + "/" + id;
   }
-  return process.env.NEXT_PUBLIC_BASE_URL + "/" + dataVariant;
+  return (process.env.NEXT_PUBLIC_BASE_URL_PROD || process.env.NEXT_PUBLIC_BASE_URL) + "/" + dataVariant;
 };
 
 export default useUrl;

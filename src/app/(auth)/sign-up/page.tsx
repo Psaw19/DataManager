@@ -1,4 +1,4 @@
-import SignupForm from "@/components/Form/Auth/SignupForm";
+import SignupForm from "@/app/(auth)/sign-up/components/SignupForm";
 import { CardWrapper } from "@/components/ui/derived/card-wrapper";
 
 const page = () => {

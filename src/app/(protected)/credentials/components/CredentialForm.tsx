@@ -34,6 +34,7 @@ const CredentialForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof CredentialSchema>) => {
+    console.log("POSTING FROM CREDENTIAL FORM");
     await actions(values);
 
     if (!error) {

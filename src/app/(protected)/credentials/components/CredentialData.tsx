@@ -3,7 +3,7 @@
 
 import { useEffect } from "react";
 
-import CredentialActions from "@/components/Data/Credentials/CredentialActions";
+import CredentialActions from "@/app/(protected)/credentials/components/CredentialActions";
 import { useActions } from "@/hooks/useActions";
 import { useUserData } from "@/hooks/useUserData";
 import { CredentialSkeleton } from "@/components/ui/derived/skeleton-template";
@@ -16,6 +16,8 @@ const CredentialData = () => {
 
   const { credentials: data } = useUserData();
   useEffect(() => {
+    console.log("GETTING FROM CREDENTIAL DATA");
+
     actions();
   }, []);
 

@@ -1,6 +1,6 @@
 import { CardWrapper } from "@/components/ui/derived/card-wrapper";
-import CredentialData from "@/components/Data/Credentials/CredentialData";
-import CredentialForm from "@/components/Form/Data/CredentialForm";
+import CredentialData from "@/app/(protected)/credentials/components/CredentialData";
+import CredentialForm from "@/app/(protected)/credentials/components/CredentialForm";
 
 const page = () => {
   return (

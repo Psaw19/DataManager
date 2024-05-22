@@ -2,7 +2,7 @@
 
 import { SquarePenIcon } from "lucide-react";
 import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -59,9 +59,47 @@ const NotesAction: React.FC<NotesActionsProps> = ({
 
   useOutsideClick(ref, handleOutsideClick);
 
-  const onSubmit = async (values: z.infer<typeof NoteSchema>) => {
-    await actions(values);
+  const watchedValues = useWatch({ control: form.control });
+  const initialValues = form.formState.defaultValues;
+
+  const hasChanges = Object.keys(watchedValues).some((key) => {
+    const watchedValue = watchedValues[key as keyof typeof watchedValues];
+    const initialValue = initialValues?.[key as keyof typeof initialValues];
+    return watchedValue?.trim() !== initialValue?.trim();
+  });
+
+  const getChangedValues = () => {
+    const changedValues: Partial<z.infer<typeof NoteSchema>> = {};
+    Object.keys(watchedValues).forEach((key) => {
+      if (
+        watchedValues[key as keyof typeof watchedValues] !==
+        initialValues?.[key as keyof typeof initialValues]
+      ) {
+        changedValues[key as keyof typeof watchedValues] =
+          watchedValues[key as keyof typeof watchedValues];
+      }
+    });
+    return changedValues;
   };
+
+  const onSubmit = async (values: z.infer<typeof NoteSchema>) => {
+    if (hasChanges) {
+      try {
+        const updatedValues = getChangedValues();
+        await actions(updatedValues);
+        console.log({ updatedValues });
+        console.log({ initialValues });
+        // form.formState.defaultValues = updatedValues
+        console.log(form.formState.defaultValues);
+        setEdit(false);
+        return;
+      } catch (error) {
+        console.error("Error updating note:", error);
+      }
+    }
+    setEdit(false);
+  };
+
   const onCancel = () => {
     setEdit((edit) => !edit);
     form.reset();
@@ -126,7 +164,7 @@ const NotesAction: React.FC<NotesActionsProps> = ({
               <div className="flex gap-4">
                 <Button
                   variant="default"
-                  disabled={loading}
+                  disabled={loading || !hasChanges}
                   className="px-2 py-1 h-min "
                   type="submit"
                 >

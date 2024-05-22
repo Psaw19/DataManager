@@ -13,6 +13,7 @@ interface Options {
 }
 
 export const useActions = ({ method, id, dataVariant }: Options) => {
+  console.log(`${dataVariant} - ${method} action`);
   const url = useUrl({ dataVariant, id });
   const { setCredentials, setNotes } = useUserData();
 

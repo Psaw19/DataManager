@@ -1,4 +1,4 @@
-import LoginForm from "@/components/Form/Auth/LoginForm";
+import LoginForm from "@/app/(auth)/login/components/LoginForm";
 import { CardWrapper } from "@/components/ui/derived/card-wrapper";
 
 const page = () => {

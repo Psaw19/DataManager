@@ -28,7 +28,10 @@ import { AxiosResponseData } from "@/types";
 
 const SignupForm = () => {
   const router = useRouter();
-  const url = process.env.NEXT_PUBLIC_BASE_URL + "/auth/sign-up";
+
+  const url =
+    (process.env.NEXT_PUBLIC_BASE_URL_PROD ||
+      process.env.NEXT_PUBLIC_BASE_URL) + "/auth/sign-up";
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -42,8 +45,7 @@ const SignupForm = () => {
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
-      fullname: "",
-      username: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -51,15 +53,14 @@ const SignupForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
-    setError("");
-    const { confirmPassword, ...formData } = values;
-    toast.loading("Creating User...");
-
+    if (isPending) {
+      toast.loading("Registeri");
+    }
     startTransition(async () => {
       try {
         const response: AxiosResponse<AxiosResponseData> = await axios.post(
           url,
-          formData
+          values
         );
         form.reset();
         router.replace("/login");
@@ -83,7 +84,7 @@ const SignupForm = () => {
           <div className="space-y-1">
             <FormField
               control={form.control}
-              name="fullname"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
@@ -92,25 +93,6 @@ const SignupForm = () => {
                       disabled={isPending}
                       type="text"
                       placeholder="John Doe"
-                      {...field}
-                      suffix={<UserCircle className="opacity-80" />}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      type="text"
-                      placeholder="john_doe"
                       {...field}
                       suffix={<UserCircle className="opacity-80" />}
                     />
@@ -129,6 +111,7 @@ const SignupForm = () => {
                   <FormControl>
                     <Input
                       disabled={isPending}
+                      type="email"
                       placeholder="john.doe@example.com"
                       {...field}
                       suffix={<MailIcon className="opacity-80" />}
@@ -175,12 +158,12 @@ const SignupForm = () => {
               )}
             />
           </div>
-          <FormError message={error} />
+          <FormError />
           <Button disabled={isPending} className="w-full" type="submit">
             Submit
           </Button>
         </form>
-        <div className="flex items-center justify-evenly w-full mx-auto my-4 before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
+        <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
           or
         </div>
         <p className="w-full text-center">

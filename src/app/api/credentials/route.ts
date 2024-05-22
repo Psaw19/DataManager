@@ -10,10 +10,11 @@ export async function POST(request: NextRequest) {
   await dbConnect();
   try {
     const userSession = await getUser();
+    const userId = userSession?._id;
     const { username, password } = await request.json();
     // console.log(userSession);
 
-    const user = await UserModel.findById(userSession?._id);
+    const user = await UserModel.findById(userId);
     if (!user) {
       return Response.json(
         {
@@ -26,6 +27,7 @@ export async function POST(request: NextRequest) {
       );
     }
     const newCredential = await CredentialModel.create({
+      userId,
       username,
       password,
     });

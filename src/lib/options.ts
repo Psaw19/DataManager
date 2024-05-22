@@ -12,10 +12,10 @@ export const authOptions: NextAuthOptions = {
       credentials: {},
 
       async authorize(credentials: any): Promise<any> {
-        const { username, password } = credentials;
+        const { email, password } = credentials;
         try {
           await dbConnect();
-          const user = await UserModel.findOne({ username });
+          const user = await UserModel.findOne({ email });
           if (!user) {
             throw new Error("No user found");
           }
@@ -25,15 +25,10 @@ export const authOptions: NextAuthOptions = {
             user?.password
           );
 
-          if (verifiedPassword) {
-            // console.log("======================");
-            // console.log("password verified");
-            // console.log({ User: user });
-            // console.log("===========================");
-            return user;
-          } else {
+          if (!verifiedPassword) {
             throw new Error("Invalid Password");
           }
+          return user;
         } catch (error: any) {
           throw new Error(error);
         }
@@ -44,8 +39,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token._id = user._id?.toString();
-        token.fullname = user.fullname;
-        token.username = user.username;
+        token.name = user.name;
+        token.email = user.email;
       }
 
       return token;
@@ -53,8 +48,8 @@ export const authOptions: NextAuthOptions = {
     async session({ token, session }) {
       if (token) {
         session.user._id = token._id;
-        session.user.fullname = token.fullname;
-        session.user.username = token.username;
+        session.user.name = token.name;
+        session.user.email = token.email;
       }
       // console.log({ session });
       // console.log({ SessionToken: token });

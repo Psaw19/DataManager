@@ -9,6 +9,20 @@ import { ThemeProvider } from "@/components/Providers/theme-provider";
 export const metadata: Metadata = {
   title: "Notes and Password Manager",
   description: "Store your data securely",
+  icons: [
+    {
+      rel: "icon",
+      type: "image/svg",
+      url: "/icon-dark.svg",
+      media: "(prefers-color-scheme: light)",
+    },
+    {
+      rel: "icon",
+      type: "image/svg",
+      url: "/icon-dark.svg",
+      media: "(prefers-color-scheme: dark)",
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -18,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="h-[100dvh]">
+      <body className="h-[100dvh] overflow-x-hidden">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -29,6 +43,7 @@ export default function RootLayout({
             <Navbar />
             <div className="w-full h-[90%]">
               <Toaster />
+
               {children}
             </div>
           </AuthProvider>
